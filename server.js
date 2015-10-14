@@ -4,9 +4,11 @@ var app = module.exports = express();
 var router = express.Router();
 var cntrl = require('./controller.js');
 
+apiToken.setExpirationTime(2);
+
 app.use(function(req, res, next) {
 	res.header('Access-Control-Allow-Origin', '*');
-	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, aziz');
+	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, authToken');
 	next();
 });
 
@@ -25,12 +27,13 @@ app.all('/api/*', function(req, res, next){
 });
 
 app.post('/api/authenticate', function(req, res){
-    var authenticated = false;
+    var authenticated = true;
     /* do your authentication tricks */
+    console.log('aaya');
     if(!authenticated){
         res.send(401);
     }else{
-        var user = apiToken.addUser(req.body.username);
+        var user = apiToken.addUser(req.body.deviceToken);
         /* send token back to client */
         res.send(200,{'token':user.token});
     }
